@@ -36,7 +36,7 @@ export const SideBar = ({
           >
             <IconAdd width={16} height={16} /> Nova conversa
           </div>
-          <nav className="flex-1 pt-2 overflow-y-auto">{children}...</nav>
+          <nav className="flex-1 pt-2 overflow-y-auto">{children}</nav>
           <div className="border-t border-gray-700 pt-2">
             <SidebarButton
               icon={<IconTrash width={16} height={16} />}

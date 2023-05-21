@@ -1,11 +1,13 @@
 'use client';
 
+import { ChatArea } from '@/components/ChatArea';
 import { Header } from '@/components/Header';
 import { SideBar } from '@/components/Sidebar';
 import { useState } from 'react';
 
 const Page = () => {
   const [sidebarOpened, setSidebarOpened] = useState(false);
+  const [chatActive, setChatActive] = useState<Chat>();
 
   const openSidebar = () => setSidebarOpened(true);
   const closeSidebar = () => {
@@ -22,7 +24,7 @@ const Page = () => {
         onClear={handleClearConversations}
         onNewChat={handleNewChat}
       >
-        <div className="w-16 h-96 bg-red-600 mt-2">...</div>
+        <div className="w-full h-5 bg-red-600 mt-2"></div>
       </SideBar>
       <section className=" flex flex-col w-full">
         <Header
@@ -30,6 +32,7 @@ const Page = () => {
           title={`bla bla bla`}
           newChatClick={handleNewChat}
         />
+        <ChatArea chat={chatActive} />
       </section>
     </main>
   );
