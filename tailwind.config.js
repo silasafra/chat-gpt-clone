@@ -14,7 +14,8 @@ module.exports = {
       },
       colors: {
         'gpt-gray': '#343541',
-        'gpt-lightgray': '#4041af'
+        'gpt-lightgray': '#40414f',
+        'gpt-bg': '#74AA9C'
       }
     }
   },

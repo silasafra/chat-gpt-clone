@@ -2,6 +2,6 @@ import { ChatMessage } from './ChatMessage'
 
 export type Chat = {
   id: string
-  titles: string
+  title: string
   messages: ChatMessage[]
 }
