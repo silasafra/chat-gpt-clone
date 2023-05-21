@@ -1,4 +1,3 @@
-import { type } from 'os';
 import IconSend from './icons/IconSend';
 import { KeyboardEvent, useEffect, useRef, useState } from 'react';
 
@@ -10,6 +9,7 @@ type Props = {
 export const ChatMessageInput = ({ disable, onSend }: Props) => {
   const [text, setText] = useState('');
   const textEL = useRef<HTMLTextAreaElement>(null);
+
   useEffect(() => {
     if (textEL.current) {
       textEL.current.style.height = '0px';
@@ -18,16 +18,17 @@ export const ChatMessageInput = ({ disable, onSend }: Props) => {
     }
   }, [text, textEL]);
 
-  const handleSendMessage = () => {
-    if (!disable && text.trim() !== '') {
-      onSend(text);
-      setText('');
-    }
-  };
   const handleOnKeyUp = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.code.toLocaleLowerCase() === 'enter' && !event.shiftKey) {
       event.preventDefault();
       handleSendMessage();
+    }
+  };
+
+  const handleSendMessage = () => {
+    if (!disable && text.trim() !== '') {
+      onSend(text);
+      setText('');
     }
   };
 
