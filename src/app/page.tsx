@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { Chat } from './types/Chat';
 import { Footer } from '@/components/Footer';
 import { v4 as uuidv4 } from 'uuid';
+import { SidebarChatButton } from '@/components/SidebarChatButton';
 
 const Page = () => {
   const [sidebarOpened, setSidebarOpened] = useState(false);
@@ -19,9 +20,29 @@ const Page = () => {
     setChatActive(chatList.find(item => item.id === chatActiveId));
   }, [chatActiveId, chatList]);
 
+  useEffect(() => {
+    if (AiLoading) getAIresponse();
+  }, [AiLoading]);
+
   const openSidebar = () => setSidebarOpened(true);
   const closeSidebar = () => {
     setSidebarOpened(false);
+  };
+
+  const getAIresponse = () => {
+    setTimeout(() => {
+      let chatListClone = [...chatList];
+      let chatIndex = chatListClone.findIndex(item => item.id === chatActiveId);
+      if (chatIndex > -1) {
+        chatListClone[chatIndex].messages.push({
+          id: uuidv4(),
+          author: 'ai',
+          body: 'Aqui vai a resposta da Ai :)'
+        });
+      }
+      setChatList(chatListClone);
+      setAiLoading(false);
+    }, 2000);
   };
 
   const handleClearConversations = () => {
@@ -63,6 +84,29 @@ const Page = () => {
     setAiLoading(true);
   };
 
+  const handleSelectChat = (id: string) => {
+    if (AiLoading) return;
+
+    let item = chatList.find(item => item.id === id);
+    if (item) setChatActiveId(item.id);
+    closeSidebar();
+  };
+  const handleDeleteChat = (id: string) => {
+    let chatListClone = [...chatList];
+    let chatIndex = chatListClone.findIndex(item => item.id === id);
+    chatListClone.splice(chatIndex, 1);
+    setChatList(chatListClone);
+    setChatActiveId('');
+  };
+  const handleEditChat = (id: string, newTitle: string) => {
+    if (newTitle) {
+      let chatListClone = [...chatList];
+      let chatIndex = chatListClone.findIndex(item => item.id === id);
+      chatListClone[chatIndex].title = newTitle;
+      setChatList(chatListClone);
+    }
+  };
+
   return (
     <main className="flex min-h-screen bg-gpt-gray ">
       <SideBar
@@ -71,12 +115,21 @@ const Page = () => {
         onClear={handleClearConversations}
         onNewChat={handleNewChat}
       >
-        <div className="w-full h-5 mt-2">...</div>
+        {chatList.map(item => (
+          <SidebarChatButton
+            key={item.id}
+            chatItem={item}
+            active={item.id === chatActiveId}
+            onClick={handleSelectChat}
+            onDelete={handleDeleteChat}
+            onEdit={handleEditChat}
+          />
+        ))}
       </SideBar>
       <section className=" flex flex-col w-full">
         <Header
           openSidebarClick={openSidebar}
-          title={`bla bla bla`}
+          title={chatActive ? chatActive.title : 'Nova Conversa'}
           newChatClick={handleNewChat}
         />
         <ChatArea chat={chatActive} loading={AiLoading} />
